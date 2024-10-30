@@ -77,3 +77,58 @@ sudo systemctl stop postgresql
 ```
 sudo systemctl enable postgresql
 ```
+
+<p style="text-align: justify; text-indent: 20px;">8. Alterar a Senha do PostgreSQL: </p>
+
+```
+sudo -i -u postgres psql
+```
+<p style="text-align: justify; text-indent: 20px;">Digite: \password, depois digite sua sena </p>
+
+```
+postgres=# \password
+```
+<p style="text-align: justify; text-indent: 20px;">Digite: \q para sair do terminal postgres. </p>
+
+```
+postgres=# \q
+```
+<p style="text-align: justify; text-indent: 20px;">9. Configurar acesso remoto: Se precisar de permitir acesso remoto ao seu servidor PostgreSQL, será necessário editar os arquivos de configuração. </p>
+<p style="text-align: justify; text-indent: 20px;">Edite o arquivo postgresql.conf: </p>
+
+```
+sudo vi /etc/postgresql/14/main/postgresql.conf
+```
+<p style="text-align: justify; text-indent: 20px;">Pessione a tecla "insert" para poder alterar o arquivo, va até a linha: </p>
+
+<p style="text-align: justify; text-indent: 20px;"><b>listen_addresses = '*'</b> </p>
+
+<p style="text-align: justify; text-indent: 20px;">Esta linha define quais endereços de IP o PostgreSQL deve escutar para conexões.</p>
+<p style="text-align: justify; text-indent: 20px;">Logo após pressione a tecla "esc" em seguida a tecla ":", a tecla "w", "q" e "enter".</p>
+<p style="text-align: justify; text-indent: 20px;">Explicação da sequência:</p>
+<p style="text-align: justify; text-indent: 20px;"><b>"Insert":</b> Entra modo de edição.</p>
+<p style="text-align: justify; text-indent: 20px;"><b>"Esc":</b> Sai do modo de edição e entra no modo de comando.</p>
+<p style="text-align: justify; text-indent: 20px;"><b>":":</b> O comando :w (write) grava as alterações feitas no arquivo.</p>
+<p style="text-align: justify; text-indent: 20px;"><b>"w":</b> O comando :w (write) grava as alterações feitas no arquivo.</p>
+<p style="text-align: justify; text-indent: 20px;"><b>"q":</b> O comando :q (quit) fecha o editor.</p>
+<p style="text-align: justify; text-indent: 20px;"><b>"Enter":</b> Executa o comando..</p>
+
+<p style="text-align: justify; text-indent: 20px;">Edite o arquivo postgresql.conf: </p>
+
+```
+sudo vi /etc/postgresql/14/main/pg_hba.conf
+```
+<p style="text-align: justify; text-indent: 20px;">Pessione a tecla "insert" para poder alterar o arquivo, adicione a linha: </p>
+
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+host    all             all             192.168.1.0/24         md5
+```
+<p style="text-align: justify; text-indent: 20px;">Configure conforme o usuário e o nome do banco: </p>
+<p style="text-align: justify; text-indent: 20px;">Logo após pressione a tecla "esc" em seguida a tecla ":", a tecla "w", "q" e "enter".</p>
+
+<p style="text-align: justify; text-indent: 20px;">Reinicie o PostgreSQL para aplicar as alterações: </p>
+
+```
+sudo systemctl restart postgresql
+```
