@@ -134,12 +134,12 @@ sudo systemctl restart postgresql
 ```
 
 **1.2. Instalando o  Node.js e o gerenciador de pacotes para NPM (Node Package Manager)**
-<p style="text-align: justify;text-indent: 20px;">1.2.1 Atualizando o Sistema: Abra o terminal no servidor linux e execute os seguintes comandos para atualizar o sistema:</p>
+<p style="text-align: justify;text-indent: 20px;">1.2.1. Atualizando o Sistema: Abra o terminal no servidor linux e execute os seguintes comandos para atualizar o sistema:</p>
 
 ```
 sudo apt update -y && sudo apt upgrade -y
 ```
-<p style="text-align: justify;text-indent: 20px;">1.2.2 Para instalar o Node.js e o gerenciador NPM. Abra o terminal no servidor linux e execute os seguintes comandos:</p>
+<p style="text-align: justify;text-indent: 20px;">1.2.2. Para instalar o Node.js e o gerenciador NPM. Abra o terminal no servidor linux e execute os seguintes comandos:</p>
 <p style="text-align: justify;text-indent: 20px;">Obs.: O NPM é o gerenciador de pacotes oficial do Node.js. </p>
 
 ```
@@ -154,12 +154,12 @@ node -v && npm -v
 <p style="text-align: justify;text-indent: 20px;">"npm -v" para ver a versão do NPM.</p>
 
 **1.3. Instalando o gerenciador de processos daemon PM2.**
-<p style="text-align: justify;text-indent: 20px;">1.3.1 Atualizando o Sistema: Abra o terminal no servidor linux e execute os seguintes comandos para atualizar o sistema:</p>
+<p style="text-align: justify;text-indent: 20px;">1.3.1. Atualizando o Sistema: Abra o terminal no servidor linux e execute os seguintes comandos para atualizar o sistema:</p>
 
 ```
 sudo apt update -y && sudo apt upgrade -y
 ```
-<p style="text-align: justify;text-indent: 20px;">1.3.2 Para instalar o PM2. Abra o terminal no servidor linux e execute os seguintes comandos:</p>
+<p style="text-align: justify;text-indent: 20px;">1.3.2. Para instalar o PM2. Abra o terminal no servidor linux e execute os seguintes comandos:</p>
 
 ```
 sudo npm install pm2 -g
@@ -178,7 +178,7 @@ pm2 -v
 <p style="text-align: justify;text-indent: 20px;">Com os arquivos de sua API salvos em uma pasta no seu pendrive.</p>
 <p style="text-align: justify;text-indent: 20px;">Obs.:Menos a pasta node_modules, ela armazena o código das bibliotecas e módulos necessários para o funcionamento da aplicação.</p>
 
-<p style="text-align: justify;text-indent: 20px;">1.4.1 Atualizando o Sistema: Abra o terminal no servidor linux e execute os seguintes comandos para atualizar o sistema:</p>
+<p style="text-align: justify;text-indent: 20px;">1.4.1. Atualizando o Sistema: Abra o terminal no servidor linux e execute os seguintes comandos para atualizar o sistema:</p>
 
 ```
 sudo apt update -y && sudo apt upgrade -y
@@ -218,7 +218,103 @@ sudo mkdir /var/api
 
 ```
  sudo scp -r /mnt/pendrive/pastaAPI /var/api/
-
 ```
 <p style="text-align: justify;text-indent: 20px;">O comando "scp -r" é usado para copiar diretórios inteiros entre máquinas (ou entre diretórios locais) de forma segura usando o SCP (Secure Copy Protocol). A opção -r significa "recursivo", o que permite copiar não apenas o diretório, mas também todos os arquivos e subdiretórios dentro dele.</p>
 
+<p style="text-align: justify;text-indent: 20px;">Desmontar quando não precisar mais. Primeiro sai da pasta do ponto de montagem. Abra o terminal no servidor linux e execute os seguinte comando:</p>
+
+```
+cd
+```
+<p style="text-align: justify;text-indent: 20px;">O comando para desmontar o dispositivo:</p>
+
+```
+ sudo umount /mnt/pendrive
+```
+<p style="text-align: justify;text-indent: 20px;">1.4.6. Abra a pasta onde transferiu os arquivos da API e execulte a instalação dos pacotes necessários:</p>
+
+<p style="text-align: justify;text-indent: 20px;">O comando para abrir a pasta:</p>
+
+```
+cd /var/api
+```
+<p style="text-align: justify;text-indent: 20px;">Dentro da pasta da API:</p>
+
+```
+sudo npm install
+```
+<p style="text-align: justify;text-indent: 20px;">O comando "npm install" é usado para instalar as dependências de um projeto Node.js listadas no arquivo package.json.</p>
+<p style="text-align: justify;text-indent: 20px;">Obs.: Lembre de seu arquivo na .env na API esta configurado de acordo com o banco de dados.</p>
+
+```
+DATABASE_URL="postgresql://postgres:postgres@1localhost:5432/nome_da_base_de_dados"
+```
+
+<p style="text-align: justify;text-indent: 20px;">Ainda na pasta da API, execulte o Prisma ORM, para gerar as tabelas no banco PostgreSQL:</p>
+
+```
+sudo npx prisma migrate dev
+```
+<p style="text-align: justify;text-indent: 20px;">Prisma é uma ferramenta para gerenciar e interagir com bancos de dados em aplicações Node.js e TypeScript. Ele é um ORM (Object-Relational Mapper) moderno que simplifica a definição e o acesso aos dados. Prisma gera consultas SQL com segurança, ajudando a evitar erros comuns e oferecendo uma experiência intuitiva de desenvolvimento.</p>
+
+<p style="text-align: justify;text-indent: 20px;">Ainda na pasta da API, execulte o PM2:</p>
+
+```
+ sudo pm2 start npm --name "nomePM2" -- run start:dev
+```
+<p style="text-align: justify;text-indent: 20px;">O comando "pm2 start": inicia uma nova aplicação ou processo sob o gerenciamento do PM2.</p>
+
+<p style="text-align: justify;text-indent: 20px;">O comando "npm": Indica que você está usando o NPM para executar um script.</p>
+
+<p style="text-align: justify;text-indent: 20px;">O comando "--name "nomePM2"": Define um nome amigável para o processo, que você pode usar para gerenciá-lo facilmente com o PM2.</p>
+
+<p style="text-align: justify;text-indent: 20px;">O comando "-- run start:dev": O parâmetro -- é usado para passar argumentos para o comando que você está executando. Neste caso, run start:dev está chamando um script definido no seu package.json. Esse script é geralmente usado para iniciar a aplicação em modo de desenvolvimento.</p>
+
+
+<p style="text-align: justify;text-indent: 20px;">Depois de execultar, deves salvar o estado atual dos processos:</p>
+
+```
+ sudo pm2 save
+```
+
+<p style="text-align: justify;text-indent: 20px;">Para garantir que o PM2 e seus processos sejam iniciados automaticamente após uma reinicialização do sistema, você pode usar o seguinte comando:</p>
+
+```
+ sudo pm2 startup
+```
+
+<p style="text-align: justify;text-indent: 20px;">Seguindo esses passos, sua aplicação será gerenciada pelo PM2 e reiniciada automaticamente após uma reinicialização do sistema.</p>
+
+**<p style="text-align: justify;text-indent: 20px;">O comandos utils no PM2.</p>**
+
+<p style="text-align: justify;text-indent: 20px;">Listar todos os processos:</p>
+
+```
+sudo pm2 list
+```
+
+<p style="text-align: justify;text-indent: 20px;">Listar todos os logs:</p>
+
+```
+sudo pm2 logs
+```
+<p style="text-align: justify;text-indent: 20px;">Listar logs específicos:</p>
+
+```
+sudo pm2 logs nome_dado_no_start_pm2
+```
+<p style="text-align: justify;text-indent: 20px;">Parar a aplicação:</p>
+
+```
+sudo pm2 stop nome_dado_no_start_pm2
+```
+<p style="text-align: justify;text-indent: 20px;">Reiniciar a aplicação:</p>
+
+```
+sudo pm2 restart nome_dado_no_start_pm2
+```
+<p style="text-align: justify;text-indent: 20px;">Deletar a aplicação:</p>
+
+```
+sudo pm2 delete nome_dado_no_start_pm2
+```
